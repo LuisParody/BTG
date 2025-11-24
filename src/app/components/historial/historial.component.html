@@ -1,0 +1,139 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+  <div class="page-header">
+    <h1>Historial de Transacciones</h1>
+    <p class="text-muted">Revisa todas tus operaciones</p>
+  </div>
+
+  <div class="spinner" *ngIf="loading"></div>
+
+  <div *ngIf="!loading">
+    <div class="grid grid-3">
+      <div class="card stats-card">
+        <div class="stats-icon suscripciones">
+          <span>📈</span>
+        </div>
+        <div class="stats-content">
+          <h3>Suscripciones</h3>
+          <p class="stats-value">{{ getTotalSuscripciones() }}</p>
+        </div>
+      </div>
+
+      <div class="card stats-card">
+        <div class="stats-icon cancelaciones">
+          <span>📉</span>
+        </div>
+        <div class="stats-content">
+          <h3>Cancelaciones</h3>
+          <p class="stats-value">{{ getTotalCancelaciones() }}</p>
+        </div>
+      </div>
+
+      <div class="card stats-card">
+        <div class="stats-icon monto">
+          <span>💵</span>
+        </div>
+        <div class="stats-content">
+          <h3>Monto Invertido</h3>
+          <p class="stats-value">
+            ${{ getMontoTotalInvertido().toLocaleString("es-CO") }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="filtros">
+        <button
+          class="filtro-btn"
+          [class.active]="filtroTipo === 'todas'"
+          (click)="filtroTipo = 'todas'"
+        >
+          Todas
+        </button>
+        <button
+          class="filtro-btn"
+          [class.active]="filtroTipo === 'apertura'"
+          (click)="filtroTipo = 'apertura'"
+        >
+          Suscripciones
+        </button>
+        <button
+          class="filtro-btn"
+          [class.active]="filtroTipo === 'cancelacion'"
+          (click)="filtroTipo = 'cancelacion'"
+        >
+          Cancelaciones
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div *ngIf="transaccionesFiltradas.length === 0" class="no-data">
+        <p>No hay transacciones para mostrar</p>
+      </div>
+
+      <div
+        class="transacciones-table"
+        *ngIf="transaccionesFiltradas.length > 0"
+      >
+        <div class="table-header">
+          <div class="th">Fecha</div>
+          <div class="th">Fondo</div>
+          <div class="th">Tipo</div>
+          <div class="th">Monto</div>
+          <div class="th">Estado</div>
+        </div>
+
+        <div
+          class="table-row"
+          *ngFor="let transaccion of transaccionesFiltradas"
+        >
+          <div class="td">
+            <div class="fecha-completa">
+              <div class="fecha-dia">
+                {{ transaccion.fecha | date : "dd/MM/yyyy" }}
+              </div>
+              <div class="fecha-hora">
+                {{ transaccion.fecha | date : "HH:mm" }}
+              </div>
+            </div>
+          </div>
+
+          <div class="td">
+            <div class="fondo-nombre">{{ transaccion.fondoNombre }}</div>
+          </div>
+
+          <div class="td">
+            <span
+              class="badge"
+              [class.badge-apertura]="transaccion.tipo === 'apertura'"
+              [class.badge-cancelacion]="transaccion.tipo === 'cancelacion'"
+            >
+              {{
+                transaccion.tipo === "apertura" ? "Suscripción" : "Cancelación"
+              }}
+            </span>
+          </div>
+
+          <div class="td">
+            <div
+              class="monto"
+              [class.apertura]="transaccion.tipo === 'apertura'"
+              [class.cancelacion]="transaccion.tipo === 'cancelacion'"
+            >
+              <span *ngIf="transaccion.tipo === 'apertura'">-</span>
+              <span *ngIf="transaccion.tipo === 'cancelacion'">+</span>
+              ${{ transaccion.monto.toLocaleString("es-CO") }}
+            </div>
+          </div>
+
+          <div class="td">
+            <span class="badge badge-estado">{{ transaccion.estado }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

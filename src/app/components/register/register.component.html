@@ -1,0 +1,162 @@
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <h1>Crear Cuenta</h1>
+      <p>Únete a BTG</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input
+            type="text"
+            id="nombre"
+            formControlName="nombre"
+            placeholder="Tu nombre"
+            [class.error]="nombre?.invalid && nombre?.touched"
+          />
+          <div class="error-message" *ngIf="nombre?.invalid && nombre?.touched">
+            <span *ngIf="nombre?.errors?.['required']"
+              >El nombre es requerido</span
+            >
+            <span *ngIf="nombre?.errors?.['minlength']"
+              >Mínimo 2 caracteres</span
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="apellido">Apellido</label>
+          <input
+            type="text"
+            id="apellido"
+            formControlName="apellido"
+            placeholder="Tu apellido"
+            [class.error]="apellido?.invalid && apellido?.touched"
+          />
+          <div
+            class="error-message"
+            *ngIf="apellido?.invalid && apellido?.touched"
+          >
+            <span *ngIf="apellido?.errors?.['required']"
+              >El apellido es requerido</span
+            >
+            <span *ngIf="apellido?.errors?.['minlength']"
+              >Mínimo 2 caracteres</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Correo Electrónico</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          placeholder="usuario@ejemplo.com"
+          [class.error]="email?.invalid && email?.touched"
+        />
+        <div class="error-message" *ngIf="email?.invalid && email?.touched">
+          <span *ngIf="email?.errors?.['required']"
+            >El correo es requerido</span
+          >
+          <span *ngIf="email?.errors?.['email']">Ingrese un correo válido</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          placeholder="Mínimo 6 caracteres"
+          [class.error]="password?.invalid && password?.touched"
+        />
+        <div
+          class="error-message"
+          *ngIf="password?.invalid && password?.touched"
+        >
+          <span *ngIf="password?.errors?.['required']"
+            >La contraseña es requerida</span
+          >
+          <span *ngIf="password?.errors?.['minlength']"
+            >Mínimo 6 caracteres</span
+          >
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="tipoDocumento">Tipo de Documento</label>
+          <select id="tipoDocumento" formControlName="tipoDocumento">
+            <option *ngFor="let tipo of tiposDocumento" [value]="tipo">
+              {{ tipo }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="numeroDocumento">Número de Documento</label>
+          <input
+            type="text"
+            id="numeroDocumento"
+            formControlName="numeroDocumento"
+            placeholder="123456789"
+            [class.error]="numeroDocumento?.invalid && numeroDocumento?.touched"
+          />
+          <div
+            class="error-message"
+            *ngIf="numeroDocumento?.invalid && numeroDocumento?.touched"
+          >
+            <span *ngIf="numeroDocumento?.errors?.['required']"
+              >El número es requerido</span
+            >
+            <span *ngIf="numeroDocumento?.errors?.['pattern']"
+              >Solo números</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="telefono">Teléfono</label>
+        <input
+          type="text"
+          id="telefono"
+          formControlName="telefono"
+          placeholder="3001234567"
+          [class.error]="telefono?.invalid && telefono?.touched"
+        />
+        <div
+          class="error-message"
+          *ngIf="telefono?.invalid && telefono?.touched"
+        >
+          <span *ngIf="telefono?.errors?.['required']"
+            >El teléfono es requerido</span
+          >
+          <span *ngIf="telefono?.errors?.['pattern']">Ingrese 10 dígitos</span>
+        </div>
+      </div>
+
+      <div class="alert alert-danger" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary btn-block"
+        [disabled]="loading || registerForm.invalid"
+      >
+        <span *ngIf="!loading">Registrarse</span>
+        <span *ngIf="loading">Registrando...</span>
+      </button>
+    </form>
+
+    <div class="register-footer">
+      <p>¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión aquí</a></p>
+    </div>
+  </div>
+</div>

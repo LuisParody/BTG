@@ -1,0 +1,111 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+  <div class="dashboard-header">
+    <h1>Bienvenido, {{ usuario?.nombre }} {{ usuario?.apellido }}</h1>
+    <p class="text-muted">Administra tus inversiones desde aquí</p>
+  </div>
+
+  <div class="spinner" *ngIf="loading"></div>
+
+  <div *ngIf="!loading">
+    <div class="grid grid-3">
+      <div class="card stats-card">
+        <div class="stats-icon saldo">
+          <span>💰</span>
+        </div>
+        <div class="stats-content">
+          <h3>Saldo Disponible</h3>
+          <p class="stats-value">
+            ${{ usuario?.saldo?.toLocaleString("es-CO") }}
+          </p>
+        </div>
+      </div>
+
+      <div class="card stats-card">
+        <div class="stats-icon invertido">
+          <span>📊</span>
+        </div>
+        <div class="stats-content">
+          <h3>Monto Invertido</h3>
+          <p class="stats-value">
+            ${{ montoInvertido.toLocaleString("es-CO") }}
+          </p>
+        </div>
+      </div>
+
+      <div class="card stats-card">
+        <div class="stats-icon total">
+          <span>💼</span>
+        </div>
+        <div class="stats-content">
+          <h3>Patrimonio Total</h3>
+          <p class="stats-value">
+            ${{
+              ((usuario?.saldo || 0) + montoInvertido).toLocaleString("es-CO")
+            }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-header">Acciones Rápidas</h2>
+      <div class="quick-actions">
+        <button class="btn btn-primary" (click)="navegarAFondos()">
+          <span class="btn-icon">🎯</span>
+          Ver Fondos Disponibles
+        </button>
+        <button class="btn btn-secondary" (click)="navegarAHistorial()">
+          <span class="btn-icon">📜</span>
+          Ver Historial Completo
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-header">Últimas Transacciones</h2>
+
+      <div *ngIf="transacciones.length === 0" class="no-data">
+        <p>No hay transacciones registradas</p>
+        <button class="btn btn-primary" (click)="navegarAFondos()">
+          Explorar Fondos
+        </button>
+      </div>
+
+      <div class="transactions-list" *ngIf="transacciones.length > 0">
+        <div class="transaction-item" *ngFor="let transaccion of transacciones">
+          <div
+            class="transaction-icon"
+            [class.apertura]="transaccion.tipo === 'apertura'"
+            [class.cancelacion]="transaccion.tipo === 'cancelacion'"
+          >
+            <span *ngIf="transaccion.tipo === 'apertura'">↗</span>
+            <span *ngIf="transaccion.tipo === 'cancelacion'">↙</span>
+          </div>
+          <div class="transaction-details">
+            <h4>{{ transaccion.fondoNombre }}</h4>
+            <p class="text-muted">
+              {{ transaccion.fecha | date : "dd/MM/yyyy HH:mm" }}
+            </p>
+          </div>
+          <div
+            class="transaction-amount"
+            [class.apertura]="transaccion.tipo === 'apertura'"
+            [class.cancelacion]="transaccion.tipo === 'cancelacion'"
+          >
+            <span *ngIf="transaccion.tipo === 'apertura'">-</span>
+            <span *ngIf="transaccion.tipo === 'cancelacion'">+</span>
+            ${{ transaccion.monto.toLocaleString("es-CO") }}
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-3" *ngIf="transacciones.length > 0">
+        <a (click)="navegarAHistorial()" style="cursor: pointer"
+          >Ver todas las transacciones →</a
+        >
+      </div>
+    </div>
+  </div>
+</div>

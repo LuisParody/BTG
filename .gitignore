@@ -1,0 +1,28 @@
+# BTG Fondos App
+
+Aplicación de gestión de fondos de inversión desarrollada con Angular 18.
+
+## Instalación
+
+```bash
+npm install
+```
+
+## Ejecutar
+
+```bash
+npm start
+```
+
+La aplicación estará disponible en `http://localhost:4200`
+
+## Credenciales Demo
+
+- Email: admin@btg.com
+- Password: admin123
+
+
+node_modules/
+dist/
+.angular/
+.cache/

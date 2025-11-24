@@ -1,0 +1,33 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <h2>BTG</h2>
+    </div>
+
+    <button class="menu-toggle" (click)="toggleMenu()">
+      <span>☰</span>
+    </button>
+
+    <div class="navbar-menu" [class.active]="menuOpen">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
+        <span class="nav-icon">🏠</span>
+        Inicio
+      </a>
+      <a routerLink="/fondos" routerLinkActive="active" class="nav-link">
+        <span class="nav-icon">📊</span>
+        Fondos
+      </a>
+      <a routerLink="/historial" routerLinkActive="active" class="nav-link">
+        <span class="nav-icon">📜</span>
+        Historial
+      </a>
+
+      <div class="navbar-user">
+        <span class="user-name">{{ usuario?.nombre }}</span>
+        <button class="btn btn-secondary btn-sm" (click)="logout()">
+          Cerrar Sesión
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>

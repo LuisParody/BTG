@@ -1,0 +1,203 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+  <div class="page-header">
+    <h1>Fondos Disponibles</h1>
+    <p class="text-muted">Explora y gestiona tus inversiones</p>
+  </div>
+
+  <div class="card filters-card">
+    <div class="filters-container">
+      <div class="form-group">
+        <label for="categoria">Categoría</label>
+        <select
+          id="categoria"
+          [(ngModel)]="categoriaSeleccionada"
+          (change)="filtrarPorCategoria()"
+        >
+          <option value="Todas">Todas</option>
+          <option value="FPV">FPV - Pensiones Voluntarias</option>
+          <option value="FIC">FIC - Inversión Colectiva</option>
+          <option value="FDO">FDO - Fondos de Acciones</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="busqueda">Buscar</label>
+        <input
+          type="text"
+          id="busqueda"
+          [(ngModel)]="busqueda"
+          (input)="buscar()"
+          placeholder="Buscar por nombre..."
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="spinner" *ngIf="loading"></div>
+
+  <div class="fondos-grid" *ngIf="!loading">
+    <div class="no-data" *ngIf="fondosFiltrados.length === 0">
+      <p>No se encontraron fondos con los criterios seleccionados</p>
+    </div>
+
+    <div class="fondo-card" *ngFor="let fondo of fondosFiltrados">
+      <div class="fondo-header">
+        <h3>{{ fondo.nombre }}</h3>
+        <span class="badge badge-categoria">{{ fondo.categoria }}</span>
+      </div>
+
+      <p class="fondo-descripcion">{{ fondo.descripcion }}</p>
+
+      <div class="fondo-stats">
+        <div class="stat-item">
+          <span class="stat-label">Monto Mínimo</span>
+          <span class="stat-value"
+            >${{ fondo.montoMinimo.toLocaleString("es-CO") }}</span
+          >
+        </div>
+
+        <div class="stat-item">
+          <span class="stat-label">Rentabilidad Anual</span>
+          <span class="stat-value text-success"
+            >{{ fondo.rentabilidadAnual }}%</span
+          >
+        </div>
+
+        <div class="stat-item">
+          <span class="stat-label">Nivel de Riesgo</span>
+          <span class="badge" [ngClass]="getRiesgoClass(fondo.riesgo)">{{
+            fondo.riesgo
+          }}</span>
+        </div>
+      </div>
+
+      <div class="fondo-actions">
+        <button
+          *ngIf="!estasSuscrito(fondo.id)"
+          class="btn btn-primary"
+          (click)="abrirModalSuscripcion(fondo)"
+          [disabled]="procesando"
+        >
+          Suscribirse
+        </button>
+
+        <button
+          *ngIf="estasSuscrito(fondo.id)"
+          class="btn btn-danger"
+          (click)="cancelarSuscripcion(fondo)"
+          [disabled]="procesando"
+        >
+          Cancelar Suscripción
+        </button>
+
+        <span class="badge badge-success" *ngIf="estasSuscrito(fondo.id)">
+          ✓ Suscrito
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="showModal" (click)="cerrarModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Suscribirse a {{ fondoSeleccionado?.nombre }}</h2>
+      <button class="close-btn" (click)="cerrarModal()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="fondo-info">
+        <p><strong>Categoría:</strong> {{ fondoSeleccionado?.categoria }}</p>
+        <p>
+          <strong>Monto Mínimo:</strong> ${{
+            fondoSeleccionado?.montoMinimo?.toLocaleString("es-CO")
+          }}
+        </p>
+        <p>
+          <strong>Rentabilidad:</strong>
+          {{ fondoSeleccionado?.rentabilidadAnual }}% anual
+        </p>
+        <p><strong>Riesgo:</strong> {{ fondoSeleccionado?.riesgo }}</p>
+      </div>
+
+      <div class="form-group">
+        <label for="monto">Monto a Invertir</label>
+        <input
+          type="number"
+          id="monto"
+          [(ngModel)]="montoSuscripcion"
+          [min]="fondoSeleccionado?.montoMinimo ?? 0"
+          placeholder="Ingrese el monto"
+        />
+        <small class="text-muted"
+          >Puede invertir un monto igual o superior al monto mínimo</small
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="metodoNotificacion">Método de Notificación</label>
+        <div class="notification-options">
+          <label class="radio-option">
+            <input
+              type="radio"
+              name="metodoNotificacion"
+              value="email"
+              [(ngModel)]="metodoNotificacion"
+            />
+            <span class="radio-label">
+              <span class="radio-icon">📧</span>
+              <span>
+                <strong>Email</strong>
+                <small>Recibirás confirmación por correo electrónico</small>
+              </span>
+            </span>
+          </label>
+
+          <label class="radio-option">
+            <input
+              type="radio"
+              name="metodoNotificacion"
+              value="sms"
+              [(ngModel)]="metodoNotificacion"
+            />
+            <span class="radio-label">
+              <span class="radio-icon">📱</span>
+              <span>
+                <strong>SMS</strong>
+                <small>Recibirás confirmación por mensaje de texto</small>
+              </span>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div class="alert alert-danger" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <div class="alert alert-success" *ngIf="successMessage">
+        {{ successMessage }}
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        class="btn btn-secondary"
+        (click)="cerrarModal()"
+        [disabled]="procesando"
+      >
+        Cancelar
+      </button>
+      <button
+        class="btn btn-primary"
+        (click)="suscribirse()"
+        [disabled]="procesando"
+      >
+        <span *ngIf="!procesando">Confirmar Suscripción</span>
+        <span *ngIf="procesando">Procesando...</span>
+      </button>
+    </div>
+  </div>
+</div>

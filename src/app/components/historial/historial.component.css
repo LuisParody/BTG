@@ -1,0 +1,226 @@
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  color: #003d82;
+  font-size: 2rem;
+}
+
+.stats-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stats-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.stats-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.stats-icon.suscripciones {
+  background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.stats-icon.cancelaciones {
+  background: linear-gradient(135deg, #dc3545, #f8d7da);
+}
+
+.stats-icon.monto {
+  background: linear-gradient(135deg, #0066cc, #00b4d8);
+}
+
+.stats-content h3 {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.stats-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #003d82;
+  margin: 0;
+}
+
+.filtros {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filtro-btn {
+  padding: 0.5rem 1.5rem;
+  border: 2px solid #dee2e6;
+  background: white;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  color: #495057;
+}
+
+.filtro-btn:hover {
+  border-color: #0066cc;
+  color: #0066cc;
+}
+
+.filtro-btn.active {
+  background: #003d82;
+  border-color: #003d82;
+  color: white;
+}
+
+.transacciones-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 1.5fr 2.5fr 1.5fr 1.5fr 1.5fr;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.9rem;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 1.5fr 2.5fr 1.5fr 1.5fr 1.5fr;
+  gap: 1rem;
+  padding: 1rem;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  align-items: center;
+  transition: background 0.3s ease;
+}
+
+.table-row:hover {
+  background: #f8f9fa;
+}
+
+.th {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.td {
+  display: flex;
+  align-items: center;
+}
+
+.fecha-completa {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.fecha-dia {
+  font-weight: 600;
+  color: #212529;
+}
+
+.fecha-hora {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.fondo-nombre {
+  font-weight: 500;
+  color: #212529;
+}
+
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.badge-apertura {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.badge-cancelacion {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.badge-estado {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  text-transform: capitalize;
+}
+
+.monto {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.monto.apertura {
+  color: #dc3545;
+}
+
+.monto.cancelacion {
+  color: #28a745;
+}
+
+.no-data {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.no-data p {
+  color: #6c757d;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 968px) {
+  .table-header {
+    display: none;
+  }
+
+  .table-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f8f9fa;
+  }
+
+  .td:before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #6c757d;
+    font-size: 0.85rem;
+  }
+
+  .td:last-child {
+    border-bottom: none;
+  }
+}
